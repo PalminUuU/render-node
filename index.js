@@ -23,6 +23,34 @@ app.get("/", (req,res) =>{
 })
 
 app.get("/ping", async (req,res) =>{
- const result = await pool.query('SELECT NOW ()')
+ const result = await pool.query('SELECT * FROM public.users')
  return res.json(result.rows[0])
 })
+
+app.get("/consulta/:email/:password", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const password = req.params.password;
+
+    const sqlSelect =
+      "SELECT * FROM  public.users " +
+      "WHERE correo = $1 AND contraseña = $2";
+
+    const result = await pool.query(sqlSelect, [email, password]);
+
+    if (result.rows.length === 0) {
+      res.send('[{"nombre": "INEXISTENTE"}]');
+    } else {
+      const filteredResult = result.rows.map(item => ({
+        id: item.id,
+        nombre: item.nombre,
+        correo: item.correo,
+      }));
+
+      res.send(filteredResult);
+    }
+  } catch (error) {
+    console.error("Error en la consulta:", error);
+    res.status(500).json({ message: "Error en la consulta" });
+  }
+});
