@@ -15,7 +15,7 @@ app.listen(port, () => {
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  //ssl: true
+  ssl: true
 })
 
 app.get("/", (req,res) =>{
@@ -32,10 +32,7 @@ app.get("/consulta/:email/:password", async (req, res) => {
     const email = req.params.email;
     const password = req.params.password;
 
-    const sqlSelect =
-      "SELECT * FROM  public.users " +
-      "WHERE correo = $1 AND contraseña = $2";
-
+    const sqlSelect ="SELECT * FROM  public.users WHERE correo = $1 AND contraseña = $2";
     const result = await pool.query(sqlSelect, [email, password]);
 
     if (result.rows.length === 0) {
