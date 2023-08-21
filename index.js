@@ -10,5 +10,5 @@ app.listen(port, () => {
 });
 
 app.get("/", (req,res) =>{
-    res.send("Hola, render")
+    res.send("Hola, render y ramon es gay")
 })
