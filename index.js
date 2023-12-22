@@ -91,7 +91,8 @@ app.post("/register/", async (req, res) => {
 
 app.get("/usuarios", async (req, res) => {
   try {
-    const query = `SELECT
+    const query = `
+    SELECT
     public.users.id,
 	  public.users.nombre,
     ARRAY_AGG(public.citas.id_cita) AS id_citas,
@@ -131,9 +132,9 @@ app.get("/usuarios_citas", async (req, res) => {
     public.citas.fecha_cita ASC;
     `;
     const result = await pool.query(query);
-    res.status(200).json(result.rows);  
+    res.status(200).json(result.rows);
   } catch (error) {
     console.error("Error en la consulta:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
-});gir
+});
